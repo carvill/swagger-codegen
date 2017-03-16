@@ -378,12 +378,20 @@ public class ApiClient {
      * @return Date representation of the string
      */
     public Date parseDateOrDatetime(String str) {
-        if (str == null)
+        if (str == null) {
             return null;
-        else if (str.length() <= dateLength)
-            return parseDate(str);
-        else
-            return parseDatetime(str);
+        } else {
+            try {
+                final long ld = Long.parseLong(str);
+                return new Date(ld);
+            } catch (final RuntimeException e) {
+                if (str.length() <= this.dateLength) {
+                    return this.parseDate(str);
+                } else {
+                    return this.parseDatetime(str);
+                }
+            }
+        }
     }
 
     /**
